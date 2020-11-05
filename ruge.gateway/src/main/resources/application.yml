@@ -1,0 +1,125 @@
+server:
+  port: 8088
+
+hystrix:
+  command:
+    default:
+      execution:
+        # 设置HystrixCommand.run()的执行是否有超时限制
+        timeout:
+          # HystrixCommand.run()执行是否应该超时, 默认值: true
+          enabled: true
+        isolation:
+          # HystrixCommand.run()执行的隔离策略, 默认:THREAD
+          # THREAD - 在一个单独的线程上执行，并发请求受到线程池中线程数的限制
+          # SEMAPHORE - 在调用线程上执行，并发请求受信号量计数的限制
+          #strategy: THREAD
+          thread:
+            # TODO 在 JVM 中我们无法强制中断一个线程，如果 Hystrix 方法里没有处理中断信号的逻辑，那么中断会被忽略
+            # 设置HystrixCommand.run()执行的超时限制
+            timeoutInMilliseconds: 60000
+            # HystrixCommand.run()超时是否中断run方法的执行, 默认值: true
+            interruptOnTimeout: true
+            # HystrixCommand.run()在发生取消时是否应中断执行, 默认值: false
+            interruptOnCancel: false
+          # HystrixCommand.run()使用时允许给方法的最大请求数
+          # hystrix.command.default.execution.isolation.strategy为SEMAPHORE有效
+          semaphore:
+            maxConcurrentRequests: 10
+      # 服务降级
+      fallback:
+        # 是否服务降级
+        enabled: true
+        # HystrixCommand.getFallback()允许方法从调用线程发出的最大请求数
+        isolation:
+          semaphore:
+            maxConcurrentRequests: 10
+      # 断路器
+      circuitBreaker:
+        # 设置断路器是否使用
+        enabled: true
+        # 设置在一个滚动窗口中，打开断路器的最少请求数
+        # 比如：如果值是20，在一个窗口内（比如10秒），收到19个请求，即使这19个请求都失败了，断路器也不会打开
+        requestVolumeThreshold: 20
+        # 设置在断路器被打开，拒绝请求到再次尝试请求并决定回路是否继续打开的时间(毫秒)
+        sleepWindowInMilliseconds: 5000
+        # 设置打开断路器并启动服务降级逻辑的错误比率
+        errorThresholdPercentage: 50   # TODO 未成功验证
+        # 如果该属性设置为true，强制断路器进入打开状态，将会拒绝所有的请求. 该属性优先级比circuitBreaker.forceClosed高
+        forceOpen: false
+        # 如果该属性设置为true，强制断路器进入关闭状态，将会允许所有的请求，无视错误率
+        forceClosed: false
+      requestLog:
+        enabled: true
+  # 设置核心线程池大小
+  threadpool:
+    default:
+      coreSize: 200
+      # 设置断路器滚动窗口的时间段大小(毫秒)
+      metrics:
+        rollingStats:
+        timeInMilliseconds: 10000
+ribbon:
+  # 请求处理的超时时间
+  ReadTimeout: 59000
+  # 请求连接的超时时间
+  ConnectTimeout: 59000
+  # 对当前实例的重试次数
+  MaxAutoRetries: 0
+  # 切换实例的重试次数
+  MaxAutoRetriesNextServer: 1
+
+# *NSCode和*MSName在调用腾讯TSF微服务时必须配置
+# *WhiteList需配置请求完整URI
+check:
+  checkTimestamp:
+    #时间戳和nonce校验开关, 若校验时间戳则nonce有效性强制校验
+    enable: false
+    #时间戳校验阈值, 单位毫秒
+    threshold: 30000
+  ##签名校验服务
+  #服务地址
+  checkAppKeyService: http://faw-vw.timanetwork.com/test/tm/appserver/app/checkSignNew
+  #签名校验白名单
+  checkAppKeyWhiteList:
+    - /appserver/app/checkSign
+    - /user/internal/v1/checkToken
+  ##UserToken校验服务
+  #服务地址
+  checkUserTokenService: http://service-cy3lsrmx-1256532032.ap-beijing.apigateway.myqcloud.com/release/user/internal/v1/checkToken
+  #UserToken校验白名单
+  checkUserTokenWhiteList:
+    - /user/public/v1/register
+    - /user/public/v1/sendVerificationCode
+    - /user/public/v1/checkVerificationCode
+    - /user/public/v1/getGraphVerificationCode
+    - /user/public/v1/checkGraphVerificationCode
+    - /user/public/v1/sendEmailActivateUrl
+    - /user/public/v1/checkEmailActivaty
+    - /user/public/v1/login
+    - /user/public/v1/loginByVerificationCode
+    - /user/public/v1/refreshToken
+    - /user/public/v1/getLoginQrcode
+    - /user/public/v1/threePartyAccountBindQuery
+    - /user/public/v1/checkAccountIsRegistered
+    - /user/public/v1/threePartyAccountLogin
+    - /user/public/v1/threePartyAccountRegister
+    - /user/public/v1/getQrcodeLoginResult
+    - /user/public/v1/resetPassword
+    - /user/public/v1/findAccount
+    - /user/public/v1/deviceBinding
+    - /user/public/v1/deviceBindingStatus
+  ##AdminToken校验服务
+  #服务地址
+  checkAdminTokenService:
+    VW: http://faw-vw.timanetwork.com/test/tm/ftbserveradmin/serverAdmin/checkAdminToken
+    AUDI: http://faw-vw.timanetwork.com/test/tm/ftbserveradmin/serverAdmin/checkAdminToken
+    EBO:
+  #AdminToken校验白名单
+  checkAdminTokenWhiteList:
+  # 配置从CDP统一登录校验adminToken的appkey
+  checkAdminTokenFromUnified:
+    # TEST
+    - 7032397405
+    # UAT
+    - 3894130549
