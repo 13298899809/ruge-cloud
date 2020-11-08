@@ -1,0 +1,42 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        enabled: true  # 启用服务发现
+        register: true  # 启用服务注册
+        deregister: true # 服务停止时取消注册
+        prefer-ip-address: false # 表示注册时使用IP而不是hostname
+        health-check-path: /actuator/health  # 健康检查的路径
+        health-check-interval: 10s   # 执行监控检查的频率
+        health-check-critical-timeout: 30s # 设置健康检查失败多长时间后，取消注册
+        service-name: ${spring.application.name} #实例名称
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address} # 服务注册标识，格式为：应用名称+服务器IP+端口
+        hostname: 127.0.0.1 #consul地址
+      host: 127.0.0.1 #consul地址
+      port: 8500   #consul端口
+      config:
+        enabled: false   #默认是true --
+        format: YAML    # 表示consul上面文件的格式 有四种 YAML PROPERTIES KEY-VALUE FILES
+        #prefix: config  #表示consul用于存储配置的文件夹根目录名为config
+        #defaultContext: application #表示配置文件对应的应用名称（eg: 你的服务如果打算取名为myApp，则这里的application就要换成myApp)
+        profileSeparator: ',' #表示如果有多个profile(eg: 开发环境dev，测试环境test...) ，则key名中的profile与defaultContext之间，用什么分隔符来表示（这里有点费解，后面还会详细解释)
+        data-key: data    #表示consul上面的KEY值(或者说文件的名字) 默认是data
+        # watch选项为配置监视功能，主要监视配置的改变
+        watch:
+          enabled: true
+          delay: 10000
+          wait-time: 30
+  application:
+    name: ruge-user
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+#ribbon:
+#  eager-load:
+#    enabled: true
+#  restclient:
+#    enabled: true
+
