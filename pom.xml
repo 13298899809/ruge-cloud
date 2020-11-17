@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>ruge.gateway</module>
         <module>ruge-user</module>
         <module>ruge-order</module>
+        <module>ruge-gateway</module>
     </modules>
 
     <properties>
@@ -26,6 +26,9 @@
         <fastjson.version>1.2.74</fastjson.version>
         <poi.version>3.17</poi.version>
         <common-pool.version>2.6.2</common-pool.version>
+        <java-jwt.version>3.11.0</java-jwt.version>
+        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt-impl.version>0.11.2</jjwt-impl.version>
     </properties>
 
 
@@ -74,6 +77,25 @@
                 <artifactId>velocity</artifactId>
                 <version>${velocity.version}</version>
             </dependency>
+            <!--token-->
+            <!--j2ee-->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt-impl.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

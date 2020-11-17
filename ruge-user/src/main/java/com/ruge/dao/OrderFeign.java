@@ -1,6 +1,6 @@
 package com.ruge.dao;
 
-import com.ruge.config.FeignConfig;
+import com.ruge.dao.impl.OrderFeignImpl;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +14,18 @@ import java.util.Map;
  * @Description: feign
  * @date 2020/11/8 23:13
  */
-@FeignClient(value = "ruge-order",configuration = FeignConfig.class)
+@FeignClient(value = "ruge-order", fallback = OrderFeignImpl.class)
 public interface OrderFeign {
-
 
     @GetMapping(value = "ruge-order/id")
     Map<String, Object> findById(@RequestParam("id") Long id);
 
-    @PostMapping(value = "ruge-order/file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping(value = "ruge-order/overtime/id")
+    Map<String, Object> findOvertimeById(@RequestParam("id") Long id);
+
+    @PostMapping(value = "ruge-order/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     Map<String, Object> file(@RequestParam("id") String id, @RequestPart("file") MultipartFile file);
+
+    @GetMapping(value = "ruge-order/hystrix/id")
+    Map<String, Object> getOrderByFeignHystrix(@RequestParam("id") long id);
 }

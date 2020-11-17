@@ -1,19 +1,14 @@
 package com.ruge.gateway.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.net.URI;
 
 /**
  * @author 嘿丷如歌
@@ -67,7 +62,7 @@ public class InPublicFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        System.out.println("InPublicFilter   2");
+//        System.out.println("InPublicFilter   2");
         return 8;
     }
 }

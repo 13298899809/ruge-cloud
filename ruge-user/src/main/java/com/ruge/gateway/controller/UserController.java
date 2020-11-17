@@ -1,4 +1,4 @@
-package com.ruge.controller;
+package com.ruge.gateway.controller;
 
 import com.ruge.dao.OrderFeign;
 import org.springframework.cloud.client.ServiceInstance;
@@ -110,4 +110,47 @@ public class UserController {
     public Map<String, Object> getOrderByFeignFile(@RequestParam("id") String id, @RequestParam("file") MultipartFile file) {
         return orderFeign.file(id, file);
     }
+
+    /**
+     * 超过5000 触发超时
+     *
+     * @return http://localhost:8081/ruge-user/feignBase/overtime/666
+     */
+    @GetMapping(value = "/feignBase/overtime/{id}")
+    public Map<String, Object> getOrderByFeignOvertimeBase(@PathVariable long id) {
+        return orderFeign.findOvertimeById(id);
+    }
+
+
+    /**
+     * 服务熔断的测试 id小于0 触发
+     *
+     * @return http://localhost:8081/ruge-user/lb/hystrix/2
+     */
+    @GetMapping(value = "/lb/hystrix/{id}")
+    public Map<String, Object> getOrderByLBHystrix(@PathVariable Long id) {
+        ServiceInstance choose = loadBalancerClient.choose("ruge-order");
+        System.out.println(choose);
+        ResponseEntity<Map> responseEntity = lbRestTemplate.getForEntity("http://ruge-order/ruge-order/hystrix/id?id=" + id, Map.class);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("name", "张三" + id);
+        map.put("rest", responseEntity);
+        return map;
+    }
+
+    /**
+     * 服务降级  当有服务熔断返回值时，优先服务熔断
+     * id < 0 服务熔断
+     * id > 500 服务降级
+     * 其他正常
+     *
+     * @return http://localhost:8081/ruge-user/feignHystrix/666
+     */
+    @GetMapping(value = "/feignHystrix/{id}")
+    public Map<String, Object> getOrderByFeignHystrix(@PathVariable long id) {
+        return orderFeign.getOrderByFeignHystrix(id);
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.ruge.filter;
+package com.ruge.gateway.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.support.NotFoundException;

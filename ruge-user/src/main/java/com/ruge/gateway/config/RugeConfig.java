@@ -1,4 +1,4 @@
-package com.ruge.config;
+package com.ruge.gateway.config;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
