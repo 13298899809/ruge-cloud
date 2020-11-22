@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: ruge-config
+      label: master
+      name: ${spring.application.name}
+    consul:
+      discovery:
+        enabled: true  # 启用服务发现
+        register: true  # 启用服务注册
+        deregister: true # 服务停止时取消注册
+        prefer-ip-address: false # 表示注册时使用IP而不是hostname
+        health-check-path: /actuator/health  # 健康检查的路径
+        health-check-interval: 10s   # 执行监控检查的频率
+        health-check-critical-timeout: 30s # 设置健康检查失败多长时间后，取消注册
+        service-name: ${spring.application.name} #实例名称
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address} # 服务注册标识，格式为：应用名称+服务器IP+端口
+        hostname: 127.0.0.1 #consul地址
+      host: 127.0.0.1 #consul地址
+      port: 8500   #consul端口
+  application:
+    name: ruge-config-git
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  #启用监控 默认打开health和info,* 表示开放所有端口

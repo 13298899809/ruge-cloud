@@ -1,9 +1,6 @@
 package com.ruge.gateway.config;
 
-import com.ruge.gateway.filter.TokenGlobalFilter;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,8 +13,8 @@ import org.springframework.stereotype.Component;
 @SpringBootConfiguration
 public class BeanConfig {
 
-    @Bean
-    public GlobalFilter customFilter() {
-        return new TokenGlobalFilter();
-    }
+//    @Bean
+//    public GlobalFilter customFilter() {
+//        return new TokenGlobalFilter();
+//    }
 }

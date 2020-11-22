@@ -1,7 +1,14 @@
 spring:
-  application:
-    name: ruge-gateway
   cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/ruge1/ruge-config-repo.git
+          username: 13298899809
+          password: 845376854
+          timeout: 10
+          basedir: D:\google     # 默认 Adding property source: file:/C:/Users/ADMINI~1/AppData/Local/Temp/config-repo-6903220453437989714/ruge-user.properties
+          default-label: master  # 默认拉取分支
     consul:
       discovery:
         enabled: true  # 启用服务发现
@@ -13,7 +20,6 @@ spring:
         health-check-critical-timeout: 30s # 设置健康检查失败多长时间后，取消注册
         service-name: ${spring.application.name} #实例名称
         instance-id: ${spring.application.name}:${spring.cloud.client.ip-address} # 服务注册标识，格式为：应用名称+服务器IP+端口
-        health-check-url: http://${spring.cloud.consul.host}:${spring.cloud.consul.port}/actuator/health
         hostname: 127.0.0.1 #consul地址
       host: 127.0.0.1 #consul地址
       port: 8500   #consul端口
@@ -29,22 +35,11 @@ spring:
           enabled: true
           delay: 10000
           wait-time: 30
-    gateway:
-      routes:
-        - id: ruge-user
-          uri: lb://ruge-user
-          predicates:
-            - Path=/ruge-user/**   # http://localhost:8088/ruge-user/ruge-user/discovery
-          filters:
-            - name: RequestRateLimiter # 限流过滤器
-              args:
-                redis-rate-limiter.replenishRate: 1  # 允许用户每秒处理多少个请求
-                redis-rate-limiter.burstCapacity: 2  # 令牌桶的容量，允许在一秒钟内完成的最大请求数
-                key-resolver: "#{@pathKeyResolver}"   # 用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
-
-
-management:
-  endpoints:
-    web:
-      exposure:
-        exclude: "*" # 开启所有web端点暴露
+  application:
+    name: ruge-config
+#
+#management:
+#  endpoint:
+#    health:
+#      show-details: always
+#

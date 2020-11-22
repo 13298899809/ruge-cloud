@@ -12,6 +12,8 @@
         <module>ruge-user</module>
         <module>ruge-order</module>
         <module>ruge-gateway</module>
+        <module>ruge-config</module>
+        <module>ruge-config-git</module>
     </modules>
 
     <properties>

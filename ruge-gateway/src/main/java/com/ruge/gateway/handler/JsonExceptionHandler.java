@@ -103,6 +103,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             message = StringUtils.isEmpty(ex.getMessage()) ? "Internal Server Error" : ex.getMessage();
         }
+        ex.printStackTrace();
         //封装响应体,此body可修改为自己的jsonBody
         Map<String, Object> result = new HashMap<>(2, 1);
         result.put("httpStatus", httpStatus);

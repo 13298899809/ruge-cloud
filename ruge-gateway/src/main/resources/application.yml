@@ -1,55 +1,15 @@
 server:
   port: 8088
-
-check:
-  checkTimestamp:
-    #时间戳和nonce校验开关, 若校验时间戳则nonce有效性强制校验
-    enable: false
-    #时间戳校验阈值, 单位毫秒
-    threshold: 30000
-  ##签名校验服务
-  #服务地址
-  checkAppKeyService: http://faw-vw.timanetwork.com/test/tm/appserver/app/checkSignNew
-  #签名校验白名单
-  checkAppKeyWhiteList:
-    - /appserver/app/checkSign
-    - /user/internal/v1/checkToken
-  ##UserToken校验服务
-  #服务地址
-  checkUserTokenService: http://service-cy3lsrmx-1256532032.ap-beijing.apigateway.myqcloud.com/release/user/internal/v1/checkToken
-  #UserToken校验白名单
-  checkUserTokenWhiteList:
-    - /user/public/v1/register
-    - /user/public/v1/sendVerificationCode
-    - /user/public/v1/checkVerificationCode
-    - /user/public/v1/getGraphVerificationCode
-    - /user/public/v1/checkGraphVerificationCode
-    - /user/public/v1/sendEmailActivateUrl
-    - /user/public/v1/checkEmailActivaty
-    - /user/public/v1/login
-    - /user/public/v1/loginByVerificationCode
-    - /user/public/v1/refreshToken
-    - /user/public/v1/getLoginQrcode
-    - /user/public/v1/threePartyAccountBindQuery
-    - /user/public/v1/checkAccountIsRegistered
-    - /user/public/v1/threePartyAccountLogin
-    - /user/public/v1/threePartyAccountRegister
-    - /user/public/v1/getQrcodeLoginResult
-    - /user/public/v1/resetPassword
-    - /user/public/v1/findAccount
-    - /user/public/v1/deviceBinding
-    - /user/public/v1/deviceBindingStatus
-  ##AdminToken校验服务
-  #服务地址
-  checkAdminTokenService:
-    VW: http://faw-vw.timanetwork.com/test/tm/ftbserveradmin/serverAdmin/checkAdminToken
-    AUDI: http://faw-vw.timanetwork.com/test/tm/ftbserveradmin/serverAdmin/checkAdminToken
-    EBO:
-  #AdminToken校验白名单
-  checkAdminTokenWhiteList:
-  # 配置从CDP统一登录校验adminToken的appkey
-  checkAdminTokenFromUnified:
-    # TEST
-    - 7032397405
-    # UAT
-    - 3894130549
+spring:
+  redis:
+    host: 172.20.24.130
+    port: 6379
+    password: 651tkoOuMeQzxLZfFUAv
+    database: 3
+    lettuce:
+      pool:
+        max-active: 1024 # 最大连接数 默认 8
+        max-wait: 10000 # 最大连接阻塞等待时间 单位毫秒 默认-1
+        max-idle: 200 # 最大空闲连接
+        min-idle: 5     #最小空闲连接
+    timeout: 10000
